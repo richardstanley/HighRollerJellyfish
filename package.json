@@ -4,7 +4,6 @@
   "description": "Team Product Owner: Richard Stanley Scrum Lord: Eric Ihli Product Team: Jake Lee, Devon Harvey",
   "main": "index.js",
   "scripts": {
-    "start": "./start.sh",
     "test": "mocha tests/**/*test.js"
   },
   "repository": {

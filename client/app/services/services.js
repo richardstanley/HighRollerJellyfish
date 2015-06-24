@@ -1,35 +1,41 @@
 angular.module('classroom.services', [])
-.service('LoginModal', function ($modal, $rootScope) {
-  function assignCurrentUser (user) { 
-    $rootScope.currentUser = user;
-    return user;
-  }
-
-  return function() {
-    var instance = $modal.open({
-      templateUrl: './index.html',
-      controller: 'LoginModalController',
-      controllerAs: 'LoginModalController'
-    })
-
-    return instance.result.then(assignCurrentUser);
-  };
-})
 
 .service('GetSyllabus', function($http, $rootScope) {
   this.lessons = function() {
-    console.log("Rootscope currentuser token", JSON.stringify($rootScope.currentUser.token));
     return $http({
-      url: 'http://localhost:3000/lessons',
+      url: '/lessons',
       method: 'GET',
       headers: {
-        'Authorization': 'Bearer ' + $rootScope.currentUser.token
+        'Authorization': 'Bearer ' + window.localStorage.jwtToken
       }
     });
   }
 })
 
-.factory('Auth', function ($http) {
+.service('GetGrades', function($http, $rootScope) {
+  this.allGrades = function () {
+    return $http({
+      url: '/grades',
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + window.localStorage.jwtToken
+      }
+    });
+  };
+
+  this.gradesForUser = function (username) {
+    return $http({
+      //this gets grades for all users right now. it should be '/grades/' + username;
+      url: '/grades?student=' + username,
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + window.localStorage.jwtToken
+      }
+    });
+  };
+})
+
+.factory('Auth', function ($http, $rootScope) {
 
 // We need some way to store user data after login. The token returned
 // by the server won't have any user information. It can only be decrypted
@@ -46,6 +52,13 @@ angular.module('classroom.services', [])
         password: password
       }
     }).then(function(res) {
+      console.log(res.data.token);
+      window.localStorage['jwtToken'] = res.data.token;
+      $rootScope.currentUser = {
+        username: res.data.username,
+        role: res.data.role,
+        token: res.data.token
+      }
       // The res sent to callback is what is returned by our /users/login api
       // It is an object which contains a token, username,
       // and role (for now. we'll update this later).
@@ -61,8 +74,13 @@ angular.module('classroom.services', [])
       url: '/users/signup',
       data: userData
     })
-    .then(function (user) {
-      cb(user);
+    .then(function (res) {
+      //TODO: instead of calling login() to send a second request to the server, have the server
+      //      create a new token when we call signup and respond with the token.
+      login(userData.username, userData.password, cb);
+    })
+    .catch(function (err) {
+      console.log('ERROR: User already exists.');
     });
   };
 

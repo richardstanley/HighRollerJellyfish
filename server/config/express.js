@@ -1,5 +1,5 @@
 var express = require('express'),
-  morgan = require('morgan'),
+ // morgan = require('morgan'),
   bodyParser = require('body-parser'),
   path = require('path'),
   passport = require('passport'),
@@ -8,7 +8,7 @@ require('./passport')(passport);
 
 module.exports = function() {
   var app = express();
-  app.use(morgan('dev'));
+  //app.use(morgan('dev'));
   app.use(bodyParser.json());
   app.use(expressSession({secret: 'mySecretKey'}));
   app.use(passport.initialize());

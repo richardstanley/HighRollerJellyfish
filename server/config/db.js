@@ -1,6 +1,6 @@
 var knex = require('knex')({
   client: 'mysql',
-  connection: DATABASE_URL
+  connection: process.env.DATABASE_URL
 });
 
 var bookshelf = module.exports = require('bookshelf')(knex);

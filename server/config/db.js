@@ -4,3 +4,4 @@ var knex = require('knex')({
 });
 
 var bookshelf = module.exports = require('bookshelf')(knex);
+

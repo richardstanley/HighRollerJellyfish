@@ -4,7 +4,8 @@
   "description": "Team Product Owner: Richard Stanley Scrum Lord: Eric Ihli Product Team: Jake Lee, Devon Harvey",
   "main": "index.js",
   "scripts": {
-    "test": "mocha tests/**/*test.js"
+    "test": "mocha tests/**/*test.js",
+    "postinstall": "./node_modules/bower/bin/bower install"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
     "bcrypt": "^0.8.3",
     "body-parser": "^1.13.1",
     "bookshelf": "^0.8.1",
+    "bower": "^1.4.1",
     "express": "^4.12.4",
     "express-session": "^1.11.3",
     "jwt-simple": "^0.3.0",

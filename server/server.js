@@ -5,4 +5,4 @@ var app = express();
 app.listen(port);
 module.exports = app;
 
-console.log('Server running at http://localhost:3000/');
+console.log('Listening to port: ' + port);
